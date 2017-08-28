@@ -16,7 +16,7 @@ use Pressbooks\CustomCss;
 function add_menu() {
 
 	if ( Book::isBook() && CustomCss::isCustomCss() ) {
-		add_theme_page( __( 'Edit CSS', 'pressbooks' ), __( 'Edit CSS', 'pressbooks' ), 'edit_others_posts', 'pb_custom_css', __NAMESPACE__ . '\display_custom_css' );
+		add_theme_page( __( 'Edit CSS', 'pressbooks-custom-css' ), __( 'Edit CSS', 'pressbooks-custom-css' ), 'edit_others_posts', 'pb_custom_css', __NAMESPACE__ . '\display_custom_css' );
 	}
 }
 
@@ -81,7 +81,7 @@ function display_custom_css() {
 
 	$css_post = get_post( $slug );
 	if ( false === $css_post ) {
-		wp_die( sprintf( __( 'Unexpected Error: There was a problem trying to query slug: %s - Please contact technical support.', 'pressbooks' ), $slug ) );
+		wp_die( sprintf( __( 'Unexpected Error: There was a problem trying to query slug: %s - Please contact technical support.', 'pressbooks-custom-css' ), $slug ) );
 	}
 
 	load_custom_css_template( $slug, $css_post );
@@ -138,7 +138,7 @@ function load_custom_css_template( $slug, $css_post ) {
 
 	if ( ! empty( $_GET['customcss_error'] ) ) {
 		// Conversion failed
-		printf( '<div class="error">%s</div>', __( 'Error: Something went wrong. See logs for more details.', 'pressbooks' ) );
+		printf( '<div class="error">%s</div>', __( 'Error: Something went wrong. See logs for more details.', 'pressbooks-custom-css' ) );
 	}
 
 	$custom_form_url = wp_nonce_url( get_admin_url( get_current_blog_id(), '/themes.php?page=pb_custom_css&customcss=yes' ), 'pb-custom-css' );
@@ -151,16 +151,16 @@ function load_custom_css_template( $slug, $css_post ) {
 	?>
 	<div class="wrap">
 		<div id="icon-themes" class="icon32"></div>
-		<h2><?php _e( 'Edit CSS', 'pressbooks' ); ?></h2>
+		<h2><?php _e( 'Edit CSS', 'pressbooks-custom-css' ); ?></h2>
 		<div class="custom-css-page">
 			<form id="pb-custom-css-form" action="<?php echo $custom_form_url ?>" method="post">
 				<input type="hidden" name="post_id" value="<?php echo $post_id; ?>"/>
 				<input type="hidden" name="post_id_integrity" value="<?php echo md5( NONCE_KEY . $post_id ); ?>"/>
-				<div style="float:left;"><?php echo __( 'You are currently editing CSS for', 'pressbooks' ) . ': ' . $slugs_dropdown; ?></div>
-				<div style="float:right;"><?php echo __( 'Copy CSS from', 'pressbooks' ) . ': ' . $css_copy_dropdown; ?></div>
+				<div style="float:left;"><?php echo __( 'You are currently editing CSS for', 'pressbooks-custom-css' ) . ': ' . $slugs_dropdown; ?></div>
+				<div style="float:right;"><?php echo __( 'Copy CSS from', 'pressbooks-custom-css' ) . ': ' . $css_copy_dropdown; ?></div>
 				<label for="my_custom_css"></label>
 				<textarea id="my_custom_css" name="my_custom_css" cols="70" rows="30"><?php echo esc_textarea( $my_custom_css ); ?></textarea>
-				<?php submit_button( __( 'Save', 'pressbooks' ), 'primary', 'save' ); ?>
+				<?php submit_button( __( 'Save', 'pressbooks-custom-css' ), 'primary', 'save' ); ?>
 			</form>
 		</div>
 		<?php echo $revisions_table; ?>
@@ -192,10 +192,10 @@ function render_revisions_table( $slug, $post_id ) {
 	$results = $q->query( $args );
 
 	$html = '<table class="widefat fixed" cellspacing="0">';
-	$html .= '<thead><th>' . __( 'Last 10 CSS Revisions', 'pressbooks' ) . " <em>(" . get_supported()[ $slug ] . ")</em> </th></thead><tbody>";
+	$html .= '<thead><th>' . __( 'Last 10 CSS Revisions', 'pressbooks-custom-css' ) . " <em>(" . get_supported()[ $slug ] . ")</em> </th></thead><tbody>";
 	foreach ( $results as $post ) {
 		$html .= '<tr><td>' . wp_post_revision_title( $post ) . ' ';
-		$html .= __( 'by', 'pressbooks' ) . ' ' . get_userdata( $post->post_author )->user_login . '</td></tr>';
+		$html .= __( 'by', 'pressbooks-custom-css' ) . ' ' . get_userdata( $post->post_author )->user_login . '</td></tr>';
 	}
 	$html .= '</tbody></table>';
 
@@ -235,7 +235,7 @@ function render_dropdown_for_slugs( $slug ) {
 			$html .= ' selected="selected"';
 		}
 		if ( 'Web' === $val ) {
-			$val = __( 'Web', 'pressbooks' );
+			$val = __( 'Web', 'pressbooks-custom-css' );
 		}
 		$html .= '>' . $val . '</option>';
 	}
@@ -265,7 +265,7 @@ function render_dropdown_for_css_copy( $slug ) {
 	jQuery.noConflict();
 	jQuery(function ($) {
 		$('#" . $select_id . "').change(function() {
-			var enable = confirm('" . __( 'This will overwrite existing custom CSS. Are you sure?', 'pressbooks' ) . "');
+			var enable = confirm('" . __( 'This will overwrite existing custom CSS. Are you sure?', 'pressbooks-custom-css' ) . "');
 			if (enable == true) {
 				var my_slug = $(this).val();
 				$.ajax({
