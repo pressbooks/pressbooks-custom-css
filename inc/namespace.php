@@ -84,14 +84,7 @@ function display_custom_css() {
 		wp_die( sprintf( __( 'Unexpected Error: There was a problem trying to query slug: %s - Please contact technical support.', 'pressbooks' ), $slug ) );
 	}
 
-	$vars = [
-		'slugs_dropdown' => render_dropdown_for_slugs( $slug ),
-		'css_copy_dropdown' => render_dropdown_for_css_copy( $slug ),
-		'revisions_table' => render_revisions_table( $slug, $css_post->ID ),
-		'post_id' => absint( $css_post->ID ),
-		'my_custom_css' => $css_post->post_content,
-	];
-	load_custom_css_template( $vars );
+	load_custom_css_template( $slug, $css_post );
 
 	set_transient( 'pb-last-custom-css-slug', $slug );
 }
@@ -138,11 +131,41 @@ function get_post( $slug ) {
 /**
  * Simple templating function.
  *
- * @param array $vars
+ * @param string $slug
+ * @param \WP_Post $css_post
  */
-function load_custom_css_template( $vars ) {
-	extract( $vars ); // @codingStandardsIgnoreLine
-	require( PB_PLUGIN_DIR . 'templates/admin/custom-css.php' );
+function load_custom_css_template( $slug, $css_post ) {
+
+	if ( ! empty( $_GET['customcss_error'] ) ) {
+		// Conversion failed
+		printf( '<div class="error">%s</div>', __( 'Error: Something went wrong. See logs for more details.', 'pressbooks' ) );
+	}
+
+	$custom_form_url = wp_nonce_url( get_admin_url( get_current_blog_id(), '/themes.php?page=pb_custom_css&customcss=yes' ), 'pb-custom-css' );
+	$slugs_dropdown = render_dropdown_for_slugs( $slug );
+	$css_copy_dropdown = render_dropdown_for_css_copy( $slug );
+	$revisions_table = render_revisions_table( $slug, $css_post->ID );
+	$post_id = absint( $css_post->ID );
+	$my_custom_css = $css_post->post_content;
+
+	?>
+	<div class="wrap">
+		<div id="icon-themes" class="icon32"></div>
+		<h2><?php _e( 'Edit CSS', 'pressbooks' ); ?></h2>
+		<div class="custom-css-page">
+			<form id="pb-custom-css-form" action="<?php echo $custom_form_url ?>" method="post">
+				<input type="hidden" name="post_id" value="<?php echo $post_id; ?>"/>
+				<input type="hidden" name="post_id_integrity" value="<?php echo md5( NONCE_KEY . $post_id ); ?>"/>
+				<div style="float:left;"><?php echo __( 'You are currently editing CSS for', 'pressbooks' ) . ': ' . $slugs_dropdown; ?></div>
+				<div style="float:right;"><?php echo __( 'Copy CSS from', 'pressbooks' ) . ': ' . $css_copy_dropdown; ?></div>
+				<label for="my_custom_css"></label>
+				<textarea id="my_custom_css" name="my_custom_css" cols="70" rows="30"><?php echo esc_textarea( $my_custom_css ); ?></textarea>
+				<?php submit_button( __( 'Save', 'pressbooks' ), 'primary', 'save' ); ?>
+			</form>
+		</div>
+		<?php echo $revisions_table; ?>
+	</div>
+	<?php
 }
 
 
@@ -401,8 +424,6 @@ function fix_url_paths( $css, $style_uri ) {
 
 /**
  * Save custom CSS to database (and filesystem)
- *
- * @see pressbooks/templates/admin/custom-css.php
  */
 function form_submit() {
 
