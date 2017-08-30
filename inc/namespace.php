@@ -327,11 +327,12 @@ function load_css_from() {
 
 		// TODO: SCSS is optional, what if the user wants to copy from an old theme that has not yet been covnerted? This file won't exist?
 
+		$styles = Container::get( 'Styles' );
 		$sass = Container::get( 'Sass' );
 
 		$path_to_style = '';
 		$uri_to_style = '';
-		if ( $sass->isCurrentThemeCompatible( 1, $theme ) ) {
+		if ( $styles->isCurrentThemeCompatible( 1, $theme ) ) {
 			if ( 'web' === $slug ) {
 				$path_to_style = realpath( $theme->get_stylesheet_directory() . '/style.scss' );
 				$uri_to_style = $theme->get_stylesheet_directory_uri();
@@ -339,7 +340,7 @@ function load_css_from() {
 				$path_to_style = realpath( $theme->get_stylesheet_directory() . "/export/$slug/style.scss" );
 				$uri_to_style = false; // We don't want a URI for EPUB or Prince exports
 			}
-		} elseif ( $sass->isCurrentThemeCompatible( 2, $theme ) ) {
+		} elseif ( $styles->isCurrentThemeCompatible( 2, $theme ) ) {
 			$path_to_style = realpath( $theme->get_stylesheet_directory() . "/assets/styles/$slug/style.scss" );
 			$uri_to_style = false; // We don't want a URI for EPUB or Prince exports
 			if ( 'web' === $slug ) {
@@ -351,14 +352,14 @@ function load_css_from() {
 
 			$scss = file_get_contents( $path_to_style );
 
-			if ( $sass->isCurrentThemeCompatible( 1, $theme ) ) {
+			if ( $styles->isCurrentThemeCompatible( 1, $theme ) ) {
 				$includes = [
 					$sass->pathToUserGeneratedSass(),
 					$sass->pathToPartials(),
 					$sass->pathToFonts(),
 					$theme->get_stylesheet_directory(),
 				];
-			} elseif ( $sass->isCurrentThemeCompatible( 2, $theme ) ) {
+			} elseif ( $styles->isCurrentThemeCompatible( 2, $theme ) ) {
 				$includes = $sass->defaultIncludePaths( $slug, $theme );
 			} else {
 				$includes = [];
