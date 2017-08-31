@@ -28,9 +28,12 @@ require( __DIR__ . '/inc/namespace.php' );
 // Hooks
 // -------------------------------------------------------------------------------------------------------------------
 
+add_action( 'init', '\PressbooksCustomCssTheme\register_post_types' );
+
 if ( is_admin() ) {
 	add_action( 'init', '\PressbooksCustomCssTheme\form_submit', 50 );
 	add_action( 'admin_menu', '\PressbooksCustomCssTheme\add_menu' );
+	add_action( 'admin_enqueue_scripts', '\PressbooksCustomCssTheme\enqueue_style' );
 	add_action( 'load-post.php', '\PressbooksCustomCssTheme\redirect_css_editor' );
 	add_action( 'wp_ajax_pb_load_css_from', '\PressbooksCustomCssTheme\load_css_from' );
 }

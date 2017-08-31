@@ -21,6 +21,44 @@ function add_menu() {
 }
 
 /**
+ * CSS for Editor
+ */
+function enqueue_style() {
+	if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'pb_custom_css' ) {
+		$assets = new \PressbooksMix\Assets( 'pressbooks-custom-css', 'theme' );
+		$path = $assets->getPath( 'styles/custom-css.css' );
+		wp_enqueue_style( 'pb-custom-css', $path );
+	}
+}
+
+/**
+ * Custom-css post types
+ */
+function register_post_types() {
+	/* Custom CSS */
+	$args = [
+		'exclude_from_search' => true,
+		'public' => false,
+		'publicly_queryable' => false,
+		'show_ui' => false,
+		'supports' => [ 'revisions' ],
+		'label' => 'Custom CSS',
+		'can_export' => false,
+		'rewrite' => false,
+		'capabilities' => [
+			'edit_post' => 'edit_others_posts',
+			'read_post' => 'read',
+			'delete_post' => 'edit_others_posts',
+			'edit_posts' => 'edit_others_posts',
+			'edit_others_posts' => 'edit_others_posts',
+			'publish_posts' => 'edit_others_posts',
+			'read_private_posts' => 'read',
+		],
+	];
+	register_post_type( 'custom-css', $args );
+}
+
+/**
  * Force the user to edit custom-css posts in our custom editor.
  */
 function redirect_css_editor() {
@@ -93,7 +131,7 @@ function display_custom_css() {
  * Returns the latest "custom-css" post
  *
  * @see \Pressbooks\Activation::wpmuActivate
- * @see \Pressbooks\Metadata::upgradeCustomCss
+ * @see \Pressbooks\CustomCss::upgradeCustomCss
  *
  * @param string $slug post_name
  *
