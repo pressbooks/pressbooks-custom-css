@@ -87,7 +87,7 @@ function redirect_css_editor() {
  * Supported formats
  *
  * Array key is slug, array val is text (passed to _e() where necessary.)
- * 'web' is considered the default key because web isn't going anywhere.
+ * 'epub' is considered the default key because alphabetical order.
  * All keys must match an *existing* WP post where post_name = __key__ and post_type = 'custom-css'
  * If the key is not 'web' then it must map to: themes-book/__SOME_THEME__/export/__key__/style.css
  *
@@ -95,9 +95,9 @@ function redirect_css_editor() {
  */
 function get_supported() {
 	return [
-		'web' => 'Web',
 		'epub' => 'Ebook',
 		'prince' => 'PDF',
+		'web' => 'Web',
 	];
 }
 
@@ -109,7 +109,7 @@ function display_custom_css() {
 
 	$slug = isset( $_GET['slug'] ) ? $_GET['slug'] : get_transient( 'pb-last-custom-css-slug' );
 	if ( ! $slug ) {
-		$slug = 'web';
+		$slug = 'epub';
 	}
 
 	$supported = array_keys( get_supported() );
@@ -188,17 +188,32 @@ function load_custom_css_template( $slug, $css_post ) {
 
 	?>
 	<div class="wrap">
-		<div id="icon-themes" class="icon32"></div>
-		<h2><?php _e( 'Edit CSS', 'pressbooks-custom-css' ); ?></h2>
+		<h1><?php _e( 'Edit CSS', 'pressbooks-custom-css' ); ?></h1>
+		<?php if ( $slug === 'web' ) : ?>
+		<div class="notice notice-error">
+			<p><?php _e( 'The Pressbooks Custom CSS theme no longer supports Custom CSS for webbooks.', 'pressbooks' ); ?></p>
+			<p><?php _e( 'To customize your webbook, you can use the Custom Styles feature with any other theme.', 'pressbooks-custom-css' ); ?></p>
+		</div>
+		<?php endif; ?>
 		<div class="custom-css-page">
 			<form id="pb-custom-css-form" action="<?php echo $custom_form_url ?>" method="post">
 				<input type="hidden" name="post_id" value="<?php echo $post_id; ?>"/>
 				<input type="hidden" name="post_id_integrity" value="<?php echo md5( NONCE_KEY . $post_id ); ?>"/>
-				<div style="float:left;"><?php echo __( 'You are currently editing CSS for', 'pressbooks-custom-css' ) . ': ' . $slugs_dropdown; ?></div>
+				<div style="float:left;"><?php echo sprintf(
+					__( 'You are currently %s CSS for', 'pressbooks-custom-css' ),
+					( $slug === 'web' ) ? __( 'viewing previously saved', 'pressbooks' ) : __( 'editing', 'pressbooks' )
+				) . ': ' . $slugs_dropdown; ?></div>
+				<?php if ( $slug !== 'web' ) : ?>
 				<div style="float:right;"><?php echo __( 'Copy CSS from', 'pressbooks-custom-css' ) . ': ' . $css_copy_dropdown; ?></div>
+				<?php endif; ?>
 				<label for="my_custom_css"></label>
-				<textarea id="my_custom_css" name="my_custom_css" cols="70" rows="30"><?php echo esc_textarea( $my_custom_css ); ?></textarea>
+				<textarea id="my_custom_css" name="my_custom_css" cols="70" rows="30"<?php echo ( $slug === 'web' ) ? ' disabled' : ''; ?>><?php echo esc_textarea( $my_custom_css ); ?></textarea>
+				<?php if ( $slug !== 'web' ) : ?>
 				<?php submit_button( __( 'Save', 'pressbooks-custom-css' ), 'primary', 'save' ); ?>
+				<?php else : ?>
+				<br />
+				<br />
+				<?php endif; ?>
 			</form>
 		</div>
 		<?php echo $revisions_table; ?>
