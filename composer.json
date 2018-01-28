@@ -11,7 +11,7 @@
     "archive": {
         "exclude": [".github"]
     },
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Pressbooks (Book Oven Inc.)",
