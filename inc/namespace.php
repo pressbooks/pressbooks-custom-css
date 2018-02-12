@@ -192,7 +192,7 @@ function load_custom_css_template( $slug, $css_post ) {
 		<?php if ( $slug === 'web' ) : ?>
 		<div class="notice notice-error">
 			<p><?php _e( 'The Pressbooks Custom CSS theme no longer supports Custom CSS for webbooks.', 'pressbooks' ); ?></p>
-			<p><?php _e( 'To customize your webbook, you can use the Custom Styles feature with any other theme.', 'pressbooks-custom-css' ); ?></p>
+			<p><?php _e( 'To customize your webbook, you will need to switch to another theme and use the Custom Styles feature. Be sure to make a copy of the stylesheet below before changing themes, as you will not be able to return to it once you do.', 'pressbooks-custom-css' ); ?></p>
 		</div>
 		<?php endif; ?>
 		<div class="custom-css-page">
