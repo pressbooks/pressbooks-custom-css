@@ -7,7 +7,7 @@ Roll your own CSS using this custom theme.
 ## Requirements
 
 * PHP >= 5.6
-* WordPress >= 4.92
+* WordPress >= 4.9.4
 * Pressbooks >= 5.0
 * Pressbooks Book >= 2.0
 
