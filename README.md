@@ -1,4 +1,4 @@
-_**This theme is no longer supported or maintained. Use at your own risk.**_
+_**This theme is no longer maintained or supported. Use at your own risk.**_
 
 # Pressbooks Custom CSS
 
