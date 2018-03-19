@@ -1,6 +1,6 @@
 # Pressbooks Custom CSS
 
-_This theme is no longer supported or maintained._
+_**This theme is no longer supported or maintained. Use at your own risk.**_
 
 Roll your own CSS using this custom theme.
 
