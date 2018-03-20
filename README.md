@@ -2,6 +2,8 @@ _**This theme is no longer maintained or supported. Use at your own risk.**_
 
 # Pressbooks Custom CSS
 
+**DEPRECATED!** [Use Custom Styles Instead!](https://guide.pressbooks.com/chapter/customizing-your-exports-with-custom-styles/)
+
 Roll your own CSS using this custom theme.
 
 ## Requirements
