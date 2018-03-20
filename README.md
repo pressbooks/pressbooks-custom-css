@@ -2,6 +2,8 @@
 
 [![Packagist](https://img.shields.io/packagist/l/pressbooks/pressbooks-custom-css.svg)](https://packagist.org/packages/pressbooks/pressbooks-custom-css) [![Packagist](https://img.shields.io/packagist/v/pressbooks/pressbooks-custom-css.svg)](https://packagist.org/packages/pressbooks/pressbooks-custom-css)
 
+**DEPRECATED!** [Use Custom Styles Instead!](https://guide.pressbooks.com/chapter/customizing-your-exports-with-custom-styles/)
+
 Roll your own CSS using this custom theme.
 
 ## Requirements
